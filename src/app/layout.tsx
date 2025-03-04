@@ -8,9 +8,8 @@ import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import Button from '@mui/material/Button'
+import HeadComponent from '../components/layout/head'
 import './globals.css'
-import HeadComponent from './head'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -24,7 +23,7 @@ const geistMono = Geist_Mono({
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: 'dark',
     primary: {
       main: '#1976d2',
     },
@@ -51,7 +50,6 @@ export default function RootLayout({
                 <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
                   Hungaroton Project
                 </Typography>
-                <Button color='inherit'>Login</Button>
               </Toolbar>
             </AppBar>
           </Box>

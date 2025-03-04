@@ -1,17 +1,17 @@
-'use client'
-
 import React from 'react'
-
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-
-import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import ArtistList from '@/components/ArtistList'
+import { fetchArtists } from '@/components/ArtistListServer'
+import { IArtist } from '@/types/artist'
 
-const HomePage = () => {
+const HomePage: React.FC = async () => {
+  const artists: IArtist[] = await fetchArtists()
+
   return (
     <Container
-      maxWidth='sm'
+      maxWidth='lg'
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -21,14 +21,13 @@ const HomePage = () => {
         textAlign: 'center',
       }}
     >
-      <Box sx={{ flexGrow: 1, width: '100%' }}>
-        <Typography variant='h4' gutterBottom>
-          Welcome to MUI + Next.js
+      <Box sx={{ flexGrow: 1, width: '100%', textAlign: 'left' }}>
+        <Typography variant='h2' gutterBottom>
+          Welcome to Hungaroton Project
         </Typography>
-        <Button variant='contained' color='primary'>
-          Get Started
-        </Button>
       </Box>
+
+      <ArtistList artists={artists} />
     </Container>
   )
 }
