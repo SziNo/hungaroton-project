@@ -46,7 +46,19 @@ const HomePage: React.FC<IPageProps> = async ({ searchParams }) => {
       }}
     >
       <Box sx={{ flexGrow: 1, width: '100%', textAlign: 'left' }}>
-        <Typography variant='h2' gutterBottom>
+        <Typography
+          variant='h1'
+          gutterBottom
+          sx={{
+            fontSize: {
+              xs: '1rem',
+              sm: '2rem',
+              md: '3rem',
+            },
+            textAlign: 'center',
+            pt: 2,
+          }}
+        >
           Welcome to Hungaroton Project
         </Typography>
         <ArtistList artists={artists} pagination={pagination} />
