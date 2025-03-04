@@ -20,7 +20,7 @@ const ArtistList: React.FC<ArtistListProps> = ({ artists }) => {
   return (
     <Grid container spacing={4} justifyContent='flex-start'>
       {artists.map((artist) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={artist.id}>
+        <Grid item xs={12} sm={6} md={4} key={artist.id}>
           <ListItem
             alignItems='flex-start'
             style={{

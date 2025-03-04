@@ -2,8 +2,8 @@ import React from 'react'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import ArtistList from '@/components/ArtistList'
-import { fetchArtists } from '@/components/ArtistListServer'
+import ArtistList from '@/components/homepage/ArtistList'
+import { fetchArtists } from '@/services/fetchArtists'
 import { IArtist } from '@/types/artist'
 
 const HomePage: React.FC = async () => {
