@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { IFetchArtistsResponse } from '@/types/artist'
 
 export async function fetchArtists(
