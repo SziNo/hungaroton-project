@@ -1,6 +1,6 @@
 export interface IPageProps {
-  searchParams: {
+  searchParams: Promise<{
     search?: string
     page?: string
-  }
+  }>
 }
