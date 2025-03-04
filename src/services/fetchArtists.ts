@@ -1,18 +1,24 @@
-import axios from 'axios'
-import { IArtist } from '@/types/artist'
+import axios, { AxiosError } from 'axios'
+import { IFetchArtistsResponse } from '@/types/artist'
 
-export async function fetchArtists(): Promise<IArtist[]> {
+export async function fetchArtists(
+  search: string = 'Szabo',
+  page: number = 1
+): Promise<IFetchArtistsResponse> {
   try {
     const res = await axios.get('https://exam.api.fotex.net/api/artists', {
       params: {
         include_image: true,
-        search: 'Szabo',
-        page: 1,
+        search: search,
+        page: page,
         per_page: 50,
       },
     })
 
-    return res.data.data || []
+    return {
+      artists: res.data.data || [],
+      pagination: res.data.pagination,
+    }
   } catch (error: any) {
     if (error.response) {
       console.error(
@@ -25,6 +31,14 @@ export async function fetchArtists(): Promise<IArtist[]> {
     } else {
       console.error('Request setup error:', error.message)
     }
-    return []
+    return {
+      artists: [],
+      pagination: {
+        current_page: 1,
+        total_pages: 1,
+        per_page: 50,
+        total_items: 0,
+      },
+    }
   }
 }

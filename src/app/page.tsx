@@ -4,10 +4,34 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import ArtistList from '@/components/homepage/ArtistList'
 import { fetchArtists } from '@/services/fetchArtists'
-import { IArtist } from '@/types/artist'
+import { IPageProps } from '@/types'
 
-const HomePage: React.FC = async () => {
-  const artists: IArtist[] = await fetchArtists()
+const HomePage: React.FC<IPageProps> = async ({ searchParams }) => {
+  // Gotta await searchParams
+  const { search, page } = await searchParams
+
+  const searchValue = search || 'Szabo'
+  const pageValue = parseInt(page || '1', 10)
+
+  let artistsResponse
+
+  try {
+    artistsResponse = await fetchArtists(searchValue, pageValue)
+  } catch (error) {
+    console.error('Error fetching artists:', error)
+    // Just return this for ArtistList component to handle the error
+    artistsResponse = {
+      artists: [],
+      pagination: {
+        current_page: 1,
+        total_pages: 1,
+        per_page: 50,
+        total_items: 0,
+      },
+    }
+  }
+
+  const { artists, pagination } = artistsResponse
 
   return (
     <Container
@@ -25,9 +49,8 @@ const HomePage: React.FC = async () => {
         <Typography variant='h2' gutterBottom>
           Welcome to Hungaroton Project
         </Typography>
+        <ArtistList artists={artists} pagination={pagination} />
       </Box>
-
-      <ArtistList artists={artists} />
     </Container>
   )
 }
