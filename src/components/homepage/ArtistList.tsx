@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import Avatar from '@mui/material/Avatar'
@@ -14,6 +15,7 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import ErrorDisplay from '@/components/ErrorDisplay'
 import { IArtistListProps } from '@/types/artist'
+import { englishAlphabet } from '@/constants'
 
 const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
   const router = useRouter()
@@ -22,6 +24,8 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
   const [page, setPage] = useState(
     parseInt(searchParams.get('page') || '1', 10)
   )
+  const [type, setType] = useState(searchParams.get('type') || '')
+  const [letter, setLetter] = useState(searchParams.get('letter') || '')
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -29,6 +33,8 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
       try {
         const params = new URLSearchParams()
         if (search) params.set('search', search)
+        if (type) params.set('type', type)
+        if (letter) params.set('letter', letter)
         if (page > 1) params.set('page', page.toString())
         router.push(`?${params.toString()}`)
         setError(null)
@@ -38,11 +44,32 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
       }
     }
     fetchData()
-  }, [search, page, router])
+  }, [search, type, letter, page, router])
 
   const handleRetry = () => {
     setError(null)
     router.refresh()
+  }
+
+  const handleSearchChange = (e: SelectChangeEvent<string>) => {
+    setSearch(e.target.value as string)
+    setType('')
+    setLetter('')
+    setPage(1)
+  }
+
+  const handleTypeChange = (e: SelectChangeEvent<string>) => {
+    setType(e.target.value as string)
+    setSearch('')
+    setLetter('')
+    setPage(1)
+  }
+
+  const handleLetterChange = (e: SelectChangeEvent<string>) => {
+    setLetter(e.target.value as string)
+    setSearch('')
+    setType('')
+    setPage(1)
   }
 
   if (error || artists.length === 0) {
@@ -57,37 +84,68 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
     )
   }
 
-  const handleSearchChange = (e: SelectChangeEvent<string>) => {
-    setSearch(e.target.value as string)
-    setPage(1)
-  }
-
   return (
     <>
       {/* Filtering */}
-      <FormControl
+      <Box
         sx={{
-          my: 2,
-          width: {
-            xs: '100%',
-            sm: '45%',
-            md: '25%',
+          display: 'flex',
+          gap: 2,
+          flexDirection: {
+            xs: 'column',
+            sm: 'row',
           },
+          my: 2,
         }}
       >
-        <InputLabel>Search by Name</InputLabel>
-        <Select
-          value={search}
-          onChange={handleSearchChange}
-          label='Search by Name'
-        >
-          <MenuItem value='Szabo'>Szabo</MenuItem>
-          <MenuItem value='Kovacs'>Kovacs</MenuItem>
-          <MenuItem value='Nagy'>Nagy</MenuItem>
-          <MenuItem value='Toth'>Toth</MenuItem>
-          <MenuItem value='Horvath'>Horvath</MenuItem>
-        </Select>
-      </FormControl>
+        {/* Search by Name */}
+        <FormControl sx={{ flex: 1 }}>
+          <InputLabel>Search by Name</InputLabel>
+          <Select
+            value={search}
+            onChange={handleSearchChange}
+            label='Search by Name'
+          >
+            <MenuItem value='Szabo'>Szabo</MenuItem>
+            <MenuItem value='Kovacs'>Kovacs</MenuItem>
+            <MenuItem value='Nagy'>Nagy</MenuItem>
+            <MenuItem value='Toth'>Toth</MenuItem>
+            <MenuItem value='Horvath'>Horvath</MenuItem>
+          </Select>
+        </FormControl>
+
+        {/* Filter by Type */}
+        <FormControl sx={{ flex: 1 }}>
+          <InputLabel>Filter by Type</InputLabel>
+          <Select
+            value={type}
+            onChange={handleTypeChange}
+            label='Filter by Type'
+          >
+            <MenuItem value=''>None</MenuItem>
+            <MenuItem value='is_composer'>Composer</MenuItem>
+            <MenuItem value='is_performer'>Performer</MenuItem>
+            <MenuItem value='is_primary'>Primary</MenuItem>
+          </Select>
+        </FormControl>
+
+        {/* Filter by Letter */}
+        <FormControl sx={{ flex: 1 }}>
+          <InputLabel>Filter by Letter</InputLabel>
+          <Select
+            value={letter}
+            onChange={handleLetterChange}
+            label='Filter by Letter'
+          >
+            <MenuItem value=''>None</MenuItem>
+            {englishAlphabet.map((char) => (
+              <MenuItem key={char} value={char}>
+                {char}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
 
       {/* List */}
       <Grid container spacing={4} justifyContent='flex-start'>

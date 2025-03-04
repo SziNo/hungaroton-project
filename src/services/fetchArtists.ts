@@ -3,7 +3,9 @@ import { IFetchArtistsResponse } from '@/types/artist'
 
 export async function fetchArtists(
   search: string = 'Szabo',
-  page: number = 1
+  page: number = 1,
+  type?: string, // Add type as an optional parameter
+  letter?: string // Add letter as an optional parameter
 ): Promise<IFetchArtistsResponse> {
   try {
     const res = await axios.get('https://exam.api.fotex.net/api/artists', {
@@ -12,6 +14,8 @@ export async function fetchArtists(
         search: search,
         page: page,
         per_page: 50,
+        type: type,
+        letter: letter,
       },
     })
 
@@ -36,7 +40,7 @@ export async function fetchArtists(
       console.error('Unexpected error:', error)
     }
 
-    // default fallback resp in case of error
+    // Default fallback response in case of error
     return {
       artists: [],
       pagination: {

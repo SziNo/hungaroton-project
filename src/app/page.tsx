@@ -7,16 +7,23 @@ import { fetchArtists } from '@/services/fetchArtists'
 import { IPageProps } from '@/types'
 
 const HomePage: React.FC<IPageProps> = async ({ searchParams }) => {
-  // searchParams needs to be awaited
-  const { search, page } = await searchParams
+  // Extract search, page, type, and letter from searchParams
+  const { search, page, type, letter } = await searchParams
 
   const searchValue = search || 'Szabo'
   const pageValue = parseInt(page || '1', 10)
+  const typeValue = type || undefined // Use undefined if type is not provided
+  const letterValue = letter || undefined // Use undefined if letter is not provided
 
   let artistsResponse
 
   try {
-    artistsResponse = await fetchArtists(searchValue, pageValue)
+    artistsResponse = await fetchArtists(
+      searchValue,
+      pageValue,
+      typeValue,
+      letterValue
+    )
   } catch (error) {
     console.error('Error fetching artists:', error)
     // Just return this for ArtistList component to handle the error
