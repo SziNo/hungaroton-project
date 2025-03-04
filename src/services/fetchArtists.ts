@@ -19,18 +19,24 @@ export async function fetchArtists(
       artists: res.data.data || [],
       pagination: res.data.pagination,
     }
-  } catch (error: any) {
-    if (error.response) {
-      console.error(
-        'Response error:',
-        error.response.status,
-        error.response.data
-      )
-    } else if (error.request) {
-      console.error('No response received:', error.request)
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.error(
+          'Response error:',
+          error.response.status,
+          error.response.data
+        )
+      } else if (error.request) {
+        console.error('No response received:', error.request)
+      } else {
+        console.error('Request setup error:', error.message)
+      }
     } else {
-      console.error('Request setup error:', error.message)
+      console.error('Unexpected error:', error)
     }
+
+    // default fallback resp in case of error
     return {
       artists: [],
       pagination: {

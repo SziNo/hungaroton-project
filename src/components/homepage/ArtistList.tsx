@@ -18,7 +18,6 @@ import { IArtistListProps } from '@/types/artist'
 const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
   const router = useRouter()
   const searchParams = useSearchParams()
-
   const [search, setSearch] = useState(searchParams.get('search') || 'Szabo')
   const [page, setPage] = useState(
     parseInt(searchParams.get('page') || '1', 10)
@@ -32,14 +31,12 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
         if (search) params.set('search', search)
         if (page > 1) params.set('page', page.toString())
         router.push(`?${params.toString()}`)
-
         setError(null)
       } catch (error) {
         console.error('Error updating URL:', error)
         setError('An error occurred. Please retry.')
       }
     }
-
     fetchData()
   }, [search, page, router])
 
@@ -68,7 +65,16 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
   return (
     <>
       {/* Filtering */}
-      <FormControl fullWidth margin='normal'>
+      <FormControl
+        sx={{
+          my: 2,
+          width: {
+            xs: '100%',
+            sm: '45%',
+            md: '25%',
+          },
+        }}
+      >
         <InputLabel>Search by Name</InputLabel>
         <Select
           value={search}
@@ -89,7 +95,7 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
           <Grid item xs={12} sm={6} md={4} key={artist.id}>
             <ListItem
               alignItems='flex-start'
-              style={{
+              sx={{
                 backgroundColor: '#f9f9f9',
                 borderRadius: '8px',
                 padding: '16px',
@@ -100,14 +106,14 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
                 <Avatar
                   alt={artist.name}
                   src={artist.portrait}
-                  style={{ width: '80px', height: '80px' }}
+                  sx={{ width: '80px', height: '80px' }}
                 />
               </ListItemAvatar>
               <ListItemText
                 primary={artist.name}
                 secondary={`Album Count: ${artist.albumCount}`}
-                style={{ marginLeft: '16px', color: '#333' }}
-                secondaryTypographyProps={{ style: { color: '#555' } }}
+                sx={{ marginLeft: '16px', color: '#333' }}
+                secondaryTypographyProps={{ sx: { color: '#555' } }}
               />
             </ListItem>
           </Grid>
@@ -119,7 +125,7 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
         count={pagination.total_pages}
         page={page}
         onChange={(e, value) => setPage(value)}
-        style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+        sx={{ my: 3, display: 'flex', justifyContent: 'center' }}
       />
     </>
   )

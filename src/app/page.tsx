@@ -7,7 +7,7 @@ import { fetchArtists } from '@/services/fetchArtists'
 import { IPageProps } from '@/types'
 
 const HomePage: React.FC<IPageProps> = async ({ searchParams }) => {
-  // Gotta await searchParams
+  // searchParams needs to be awaited
   const { search, page } = await searchParams
 
   const searchValue = search || 'Szabo'
@@ -36,7 +36,7 @@ const HomePage: React.FC<IPageProps> = async ({ searchParams }) => {
   return (
     <Container
       maxWidth='lg'
-      style={{
+      sx={{
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
