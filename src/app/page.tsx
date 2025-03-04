@@ -7,13 +7,12 @@ import { fetchArtists } from '@/services/fetchArtists'
 import { IPageProps } from '@/types'
 
 const HomePage: React.FC<IPageProps> = async ({ searchParams }) => {
-  // Extract search, page, type, and letter from searchParams
   const { search, page, type, letter } = await searchParams
 
   const searchValue = search || 'Szabo'
   const pageValue = parseInt(page || '1', 10)
-  const typeValue = type || undefined // Use undefined if type is not provided
-  const letterValue = letter || undefined // Use undefined if letter is not provided
+  const typeValue = type || undefined
+  const letterValue = letter || undefined
 
   let artistsResponse
 
@@ -26,7 +25,6 @@ const HomePage: React.FC<IPageProps> = async ({ searchParams }) => {
     )
   } catch (error) {
     console.error('Error fetching artists:', error)
-    // Just return this for ArtistList component to handle the error
     artistsResponse = {
       artists: [],
       pagination: {
@@ -35,10 +33,11 @@ const HomePage: React.FC<IPageProps> = async ({ searchParams }) => {
         per_page: 50,
         total_items: 0,
       },
+      isError: true,
     }
   }
 
-  const { artists, pagination } = artistsResponse
+  const { artists, pagination, isError } = artistsResponse
 
   return (
     <Container
@@ -68,7 +67,11 @@ const HomePage: React.FC<IPageProps> = async ({ searchParams }) => {
         >
           Welcome to Hungaroton Project
         </Typography>
-        <ArtistList artists={artists} pagination={pagination} />
+        <ArtistList
+          artists={artists}
+          pagination={pagination}
+          isError={isError}
+        />
       </Box>
     </Container>
   )

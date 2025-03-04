@@ -13,11 +13,16 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
+import Typography from '@mui/material/Typography'
 import ErrorDisplay from '@/components/ErrorDisplay'
 import { IArtistListProps } from '@/types/artist'
 import { englishAlphabet } from '@/constants'
 
-const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
+const ArtistList: React.FC<IArtistListProps> = ({
+  artists,
+  pagination,
+  isError,
+}) => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [search, setSearch] = useState(searchParams.get('search') || 'Szabo')
@@ -26,28 +31,17 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
   )
   const [type, setType] = useState(searchParams.get('type') || '')
   const [letter, setLetter] = useState(searchParams.get('letter') || '')
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const params = new URLSearchParams()
-        if (search) params.set('search', search)
-        if (type) params.set('type', type)
-        if (letter) params.set('letter', letter)
-        if (page > 1) params.set('page', page.toString())
-        router.push(`?${params.toString()}`)
-        setError(null)
-      } catch (error) {
-        console.error('Error updating URL:', error)
-        setError('An error occurred. Please retry.')
-      }
-    }
-    fetchData()
+    const params = new URLSearchParams()
+    if (search) params.set('search', search)
+    if (type) params.set('type', type)
+    if (letter) params.set('letter', letter)
+    if (page > 1) params.set('page', page.toString())
+    router.push(`?${params.toString()}`)
   }, [search, type, letter, page, router])
 
   const handleRetry = () => {
-    setError(null)
     router.refresh()
   }
 
@@ -72,21 +66,9 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
     setPage(1)
   }
 
-  if (error || artists.length === 0) {
-    return (
-      <ErrorDisplay
-        message={
-          error ||
-          'An error occurred. Please retry. (You might need to retry more than once)'
-        }
-        onRetry={handleRetry}
-      />
-    )
-  }
-
   return (
     <>
-      {/* Filtering */}
+      {/* Filtering Dropdowns */}
       <Box
         sx={{
           display: 'flex',
@@ -98,7 +80,6 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
           my: 2,
         }}
       >
-        {/* Search by Name */}
         <FormControl sx={{ flex: 1 }}>
           <InputLabel>Search by Name</InputLabel>
           <Select
@@ -114,7 +95,6 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
           </Select>
         </FormControl>
 
-        {/* Filter by Type */}
         <FormControl sx={{ flex: 1 }}>
           <InputLabel>Filter by Type</InputLabel>
           <Select
@@ -129,7 +109,6 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
           </Select>
         </FormControl>
 
-        {/* Filter by Letter */}
         <FormControl sx={{ flex: 1 }}>
           <InputLabel>Filter by Letter</InputLabel>
           <Select
@@ -147,44 +126,63 @@ const ArtistList: React.FC<IArtistListProps> = ({ artists, pagination }) => {
         </FormControl>
       </Box>
 
-      {/* List */}
-      <Grid container spacing={4} justifyContent='flex-start'>
-        {artists.map((artist) => (
-          <Grid item xs={12} sm={6} md={4} key={artist.id}>
-            <ListItem
-              alignItems='flex-start'
-              sx={{
-                backgroundColor: '#f9f9f9',
-                borderRadius: '8px',
-                padding: '16px',
-                height: '100%',
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar
-                  alt={artist.name}
-                  src={artist.portrait}
-                  sx={{ width: '80px', height: '80px' }}
+      {isError && (
+        <Box sx={{ textAlign: 'center', my: 4 }}>
+          <ErrorDisplay
+            message='An error occurred. Please retry. You might need to retry more than once.'
+            onRetry={handleRetry}
+          />
+        </Box>
+      )}
+
+      {!isError && artists.length === 0 && (
+        <Typography variant='body1' sx={{ textAlign: 'center', my: 4 }}>
+          No artists found for this filter.
+        </Typography>
+      )}
+
+      {/* Artist List */}
+      {!isError && artists.length > 0 && (
+        <Grid container spacing={4} justifyContent='flex-start'>
+          {artists.map((artist) => (
+            <Grid item xs={12} sm={6} md={4} key={artist.id}>
+              <ListItem
+                alignItems='flex-start'
+                sx={{
+                  backgroundColor: '#f9f9f9',
+                  borderRadius: '8px',
+                  padding: '16px',
+                  height: '100%',
+                }}
+              >
+                <ListItemAvatar>
+                  <Avatar
+                    alt={artist.name}
+                    src={artist.portrait}
+                    sx={{ width: '80px', height: '80px' }}
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={artist.name}
+                  secondary={`Album Count: ${artist.albumCount}`}
+                  sx={{ marginLeft: '16px', color: '#333' }}
+                  secondaryTypographyProps={{ sx: { color: '#555' } }}
                 />
-              </ListItemAvatar>
-              <ListItemText
-                primary={artist.name}
-                secondary={`Album Count: ${artist.albumCount}`}
-                sx={{ marginLeft: '16px', color: '#333' }}
-                secondaryTypographyProps={{ sx: { color: '#555' } }}
-              />
-            </ListItem>
-          </Grid>
-        ))}
-      </Grid>
+              </ListItem>
+            </Grid>
+          ))}
+        </Grid>
+      )}
 
       {/* Pagination */}
-      <Pagination
-        count={pagination.total_pages}
-        page={page}
-        onChange={(e, value) => setPage(value)}
-        sx={{ my: 3, display: 'flex', justifyContent: 'center' }}
-      />
+      {!isError && artists.length > 0 && (
+        <Pagination
+          count={pagination.total_pages}
+          page={page}
+          onChange={(e, value) => setPage(value)}
+          sx={{ my: 3, display: 'flex', justifyContent: 'center' }}
+        />
+      )}
     </>
   )
 }

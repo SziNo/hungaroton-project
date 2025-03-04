@@ -13,6 +13,7 @@ export interface IArtistListProps {
     per_page: number
     total_items: number
   }
+  isError: boolean
 }
 
 export interface IFetchArtistsResponse {
