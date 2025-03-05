@@ -132,7 +132,7 @@ const ArtistList: React.FC<IArtistListProps> = ({
       {isError && (
         <Box sx={{ textAlign: 'center', my: 4 }}>
           <ErrorDisplay
-            message='An error occurred. Please retry. You might need to retry more than once.'
+            message='An error occurred during fetching data. Please retry. You might need to retry more than once.'
             onRetry={handleRetry}
             data-cy='error-message'
           />
