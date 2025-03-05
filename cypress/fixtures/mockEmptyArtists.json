@@ -1,0 +1,10 @@
+{
+  "artists": [],
+  "pagination": {
+    "current_page": 1,
+    "total_pages": 1,
+    "per_page": 50,
+    "total_items": 0
+  },
+  "isError": true
+}

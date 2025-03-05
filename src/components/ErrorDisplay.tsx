@@ -34,6 +34,7 @@ const ErrorDisplay: React.FC<IErrorDisplayProps> = ({ message, onRetry }) => {
             backgroundColor: 'rgba(255, 0, 0, 0.04)',
           },
         }}
+        data-cy='retry-button'
       >
         Retry
       </Button>

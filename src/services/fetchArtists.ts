@@ -50,7 +50,7 @@ export async function fetchArtists(
         per_page: 50,
         total_items: 0,
       },
-      isError: true, // Indicate an error
+      isError: true,
     }
   }
 }

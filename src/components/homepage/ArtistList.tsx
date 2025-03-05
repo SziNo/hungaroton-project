@@ -86,6 +86,7 @@ const ArtistList: React.FC<IArtistListProps> = ({
             value={search}
             onChange={handleSearchChange}
             label='Search by Name'
+            data-cy='search-filter'
           >
             <MenuItem value='Szabo'>Szabo</MenuItem>
             <MenuItem value='Kovacs'>Kovacs</MenuItem>
@@ -101,6 +102,7 @@ const ArtistList: React.FC<IArtistListProps> = ({
             value={type}
             onChange={handleTypeChange}
             label='Filter by Type'
+            data-cy='type-filter'
           >
             <MenuItem value=''>None</MenuItem>
             <MenuItem value='is_composer'>Composer</MenuItem>
@@ -115,6 +117,7 @@ const ArtistList: React.FC<IArtistListProps> = ({
             value={letter}
             onChange={handleLetterChange}
             label='Filter by Letter'
+            data-cy='letter-filter'
           >
             <MenuItem value=''>None</MenuItem>
             {englishAlphabet.map((char) => (
@@ -131,12 +134,17 @@ const ArtistList: React.FC<IArtistListProps> = ({
           <ErrorDisplay
             message='An error occurred. Please retry. You might need to retry more than once.'
             onRetry={handleRetry}
+            data-cy='error-message'
           />
         </Box>
       )}
 
       {!isError && artists.length === 0 && (
-        <Typography variant='body1' sx={{ textAlign: 'center', my: 4 }}>
+        <Typography
+          variant='body1'
+          sx={{ textAlign: 'center', my: 4 }}
+          data-cy='no-artists-message'
+        >
           No artists found for this filter.
         </Typography>
       )}
@@ -154,12 +162,14 @@ const ArtistList: React.FC<IArtistListProps> = ({
                   padding: '16px',
                   height: '100%',
                 }}
+                data-cy='artist-item'
               >
                 <ListItemAvatar>
                   <Avatar
                     alt={artist.name}
                     src={artist.portrait}
                     sx={{ width: '80px', height: '80px' }}
+                    data-cy='artist-avatar'
                   />
                 </ListItemAvatar>
                 <ListItemText
@@ -167,6 +177,7 @@ const ArtistList: React.FC<IArtistListProps> = ({
                   secondary={`Album Count: ${artist.albumCount}`}
                   sx={{ marginLeft: '16px', color: '#333' }}
                   secondaryTypographyProps={{ sx: { color: '#555' } }}
+                  data-cy='artist-name'
                 />
               </ListItem>
             </Grid>
@@ -181,6 +192,7 @@ const ArtistList: React.FC<IArtistListProps> = ({
           page={page}
           onChange={(e, value) => setPage(value)}
           sx={{ my: 3, display: 'flex', justifyContent: 'center' }}
+          data-cy='pagination'
         />
       )}
     </>

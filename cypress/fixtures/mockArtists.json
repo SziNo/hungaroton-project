@@ -1,0 +1,23 @@
+{
+  "artists": [
+    {
+      "id": 1,
+      "name": "Szabo",
+      "portrait": "https://example.com/szabo.jpg",
+      "albumCount": 5
+    },
+    {
+      "id": 2,
+      "name": "Kovacs",
+      "portrait": "https://example.com/kovacs.jpg",
+      "albumCount": 3
+    }
+  ],
+  "pagination": {
+    "current_page": 1,
+    "total_pages": 1,
+    "per_page": 50,
+    "total_items": 2
+  },
+  "isError": false
+}
