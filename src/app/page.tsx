@@ -1,8 +1,8 @@
 import React from 'react'
+import ArtistListLoader from '@/components/homepage/ArtistListLoader'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import ArtistList from '@/components/homepage/ArtistList'
 import { fetchArtists } from '@/services/fetchArtists'
 import { IPageProps } from '@/types'
 
@@ -67,7 +67,7 @@ const HomePage: React.FC<IPageProps> = async ({ searchParams }) => {
         >
           Welcome to Hungaroton Project
         </Typography>
-        <ArtistList
+        <ArtistListLoader
           artists={artists}
           pagination={pagination}
           isError={isError}
