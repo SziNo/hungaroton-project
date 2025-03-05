@@ -13,7 +13,7 @@ This project showcases a list of artists with functionality to:
 ## Live Demo
 
 The project is deployed on Vercel and can be accessed here:
-[Hungaroton Project on Vercel](https://hungaroton-project.vercel.app)
+<a href="https://hungaroton-project.vercel.app" target="_blank">Hungaroton Project on Vercel</a>
 
 ## Getting Started
 
