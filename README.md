@@ -14,7 +14,7 @@ This project showcases a list of artists with functionality to:
 
 The project is deployed on Vercel and can be accessed here:
 [Hungaroton Project on Vercel](https://hungaroton-project.vercel.app)
-(Right-click and select "Open link in new tab" to open in a new window.)
+(Ctrl + click on link or right-click and select "Open link in new tab" to open in a new window.)
 
 ## Getting Started
 
