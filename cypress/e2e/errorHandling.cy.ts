@@ -4,25 +4,25 @@ describe('Error Handling', () => {
   })
 
   it('should display an error message on API failure', () => {
-    cy.mockApiError() // Simulate an API error
+    cy.mockApiError()
     cy.visit('/')
-    cy.get('[data-cy="error-message"]').should('be.visible') // Verify the error message
-    cy.get('[data-cy="retry-button"]').click() // Test the retry button
+    cy.get('[data-cy="error-message"]').should('be.visible')
+    cy.get('[data-cy="retry-button"]').click()
   })
 
   it('should retry fetching artists on button click', () => {
-    cy.mockApiError() // Simulate an API error
+    cy.mockApiError()
     cy.visit('/')
     cy.get('[data-cy="error-message"]').should('be.visible')
 
-    cy.mockApiSuccess('mockArtists.json') // Mock a successful response
+    cy.mockApiSuccess('mockArtists.json')
     cy.get('[data-cy="retry-button"]').click()
     cy.get('[data-cy="artist-item"]').should('have.length.gt', 0)
   })
 
   it('should display "No artists found" message', () => {
-    cy.mockApiSuccess('mockEmptyArtists.json') // Mock empty artists response with isError true
+    cy.mockApiSuccess('mockEmptyArtists.json')
     cy.visit('/')
-    cy.get('[data-cy="no-artists-message"]').should('be.visible') // Verify the message
+    cy.get('[data-cy="no-artists-message"]').should('be.visible')
   })
 })
